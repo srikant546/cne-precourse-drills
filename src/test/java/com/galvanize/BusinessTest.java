@@ -129,7 +129,7 @@ public class BusinessTest {
         Arrays.asList("street", "city", "state", "zip").forEach(fieldName -> {
             try {
                 Field field = addressClass.getDeclaredField(fieldName);
-                assertSame("Expected the " + fieldName + " field on Address to be a String", field.getType(), String.class);
+                assertSame("Expected the " + fieldName + " field on Address to be a String", String.class, field.getType());
                 assertTrue("Expected the " + fieldName + " field on Address to be private", Modifier.isPrivate(field.getModifiers()));
             } catch (NoSuchFieldException e) {
                 fail("Expected Address class to have a private String field named " + fieldName);
@@ -141,7 +141,7 @@ public class BusinessTest {
         Arrays.asList("getStreet", "getCity", "getState", "getZip").forEach(fieldName -> {
             try {
                 Method method = addressClass.getDeclaredMethod(fieldName);
-                assertSame("Expected the " + fieldName + " method on Address to return a String", method.getReturnType(), String.class);
+                assertSame("Expected the " + fieldName + " method on Address to return a String", String.class, method.getReturnType());
                 assertTrue("Expected the " + fieldName + " method on Address to be public", Modifier.isPublic(method.getModifiers()));
             } catch (NoSuchMethodException e) {
                 fail("Expected Address class to have a public method named " + fieldName);
@@ -151,7 +151,7 @@ public class BusinessTest {
         Arrays.asList("setStreet", "setCity", "setState", "setZip").forEach(fieldName -> {
             try {
                 Method method = addressClass.getDeclaredMethod(fieldName, String.class);
-                assertSame("Expected the " + fieldName + " method on Address to return void", method.getReturnType(), Void.TYPE);
+                assertSame("Expected the " + fieldName + " method on Address to return void", Void.TYPE, method.getReturnType());
                 assertTrue("Expected the " + fieldName + " method on Address to be public", Modifier.isPublic(method.getModifiers()));
             } catch (NoSuchMethodException e) {
                 fail("Expected Address class to have a public method named " + fieldName + " that takes a String");
@@ -192,7 +192,7 @@ public class BusinessTest {
                     .getConstructor(String.class, String.class, String.class, String.class)
                     .newInstance("Street", "City", "ST", "55555");
 
-            assertEquals("You haven't implemented Address toString correctly", address.toString(), "Street, City, ST, 55555");
+            assertEquals("You haven't implemented Address toString correctly", "Street, City, ST, 55555", address.toString());
         } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
             fail("Something is wrong with the Address::toString method");
@@ -237,10 +237,10 @@ public class BusinessTest {
     private void assertAddressableGetAddresses(Class<?> addressable) {
         try {
             Method getAddresses = addressable.getMethod("getAddresses");
-            assertEquals("Expected getAddresses to return a List<Address>", getAddresses.getReturnType(), List.class);
+            assertEquals("Expected getAddresses to return a List<Address>", List.class, getAddresses.getReturnType());
 
             ParameterizedType getAddressesReturnType = (ParameterizedType) getAddresses.getGenericReturnType();
-            assertEquals(getAddressesReturnType.getActualTypeArguments()[0], Class.forName("com.galvanize.Address"));
+            assertEquals(Class.forName("com.galvanize.Address"), getAddressesReturnType.getActualTypeArguments()[0]);
         } catch (NoSuchMethodException e) {
             fail("Expected Addressable to declare a method named getAddresses");
         } catch (ClassNotFoundException e) {
@@ -253,7 +253,7 @@ public class BusinessTest {
     private void assertAddressableAddAddress(Class<?> addressable) {
         try {
             Method addAddressMethod = addressable.getMethod("addAddress", Class.forName("com.galvanize.Address"));
-            assertEquals("Expected addAddress to return void", addAddressMethod.getReturnType(), Void.TYPE);
+            assertEquals("Expected addAddress to return void", Void.TYPE, addAddressMethod.getReturnType());
         } catch (NoSuchMethodException e) {
             fail("Expected Addressable to declare a method named addAddress, with one parameter of type Address");
         } catch (ClassNotFoundException e) {
