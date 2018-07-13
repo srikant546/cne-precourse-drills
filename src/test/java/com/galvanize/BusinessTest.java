@@ -192,7 +192,7 @@ public class BusinessTest {
                     .getConstructor(String.class, String.class, String.class, String.class)
                     .newInstance("Street", "City", "ST", "55555");
 
-            assertEquals("You haven't implemented Address toString correctly", "Street, City, ST, 55555", address.toString());
+            assertEquals("You haven't implemented Address toString correctly", "Street, City, ST 55555", address.toString());
         } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
             fail("Something is wrong with the Address::toString method");
